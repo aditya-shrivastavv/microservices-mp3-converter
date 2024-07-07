@@ -4,6 +4,7 @@ import os
 from flask import Flask, request
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
+from .utils import createJWT, decodeJWT
 
 load_dotenv()
 
@@ -26,16 +27,31 @@ def login():
 
     cur = mysql.connection.cursor()
     res = cur.execute(
-        "SELECT email, password FROM users WHERE email = %s", (auth.username,)
+        "SELECT email, password FROM users WHERE email = %s AND password = %s", (
+            auth.username, auth.password, )
     )
 
     if res == 0:
-        return {"message": "Invalid credentials"}, 404
-
-    user_row = cur.fetchone()
-    password = user_row[1]
-
-    if auth.password != password:
-        return {"message": "Invalid password"}, 401
+        return {"message": "Invalid credentials"}, 401
     else:
         return createJWT(auth.username, os.environ.get("JWT_SECRET"), True)
+
+
+@server.route("/validate", methods=["POST"])
+def validate():
+    encoded_jwt = request.headers["Authorization"]
+
+    if not encoded_jwt:
+        return {"message": "Missing token"}, 401
+
+    encoded_jwt = encoded_jwt.split(" ")[1]
+
+    try:
+        decoded = decodeJWT(encoded_jwt, os.environ.get("JWT_SECRET"), "HS256")
+        return decoded, 200
+    except:
+        return {"message": "Invalid token"}, 401
+
+
+if __name__ == "__main__":
+    server.run(host="0.0.0.0", port=5000)
