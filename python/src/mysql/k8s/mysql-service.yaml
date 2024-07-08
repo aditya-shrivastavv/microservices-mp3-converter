@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  labels:
+    db: mysql
+    project: microservices_mp4-to-mp3-converter
+spec:
+  selector:
+    db: mysql
+  ports:
+  - port: 3306
+  type: ClusterIP

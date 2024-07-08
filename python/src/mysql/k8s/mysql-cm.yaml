@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb
+  labels:
+    db: mysql
+    project: microservices_mp4-to-mp3-converter
+data:
+  init.sql: "USE auth;\r\n\r\nCREATE TABLE user (\r\n    id INT NOT NULL AUTO_INCREMENT
+    PRIMARY KEY,\r\n    email VARCHAR(255) NOT NULL UNIQUE,\r\n    password VARCHAR(255)
+    NOT NULL\r\n);\r\n\r\nINSERT INTO user (email, password) VALUES (\"aditya@email.com\",
+    \"admin123\");"
