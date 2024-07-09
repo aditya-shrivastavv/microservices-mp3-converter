@@ -1,10 +1,9 @@
-import jwt
 import datetime
 import os
 from flask import Flask, request
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
-from .utils import createJWT, decodeJWT
+from utils import createJWT, decodeJWT
 
 load_dotenv()
 
