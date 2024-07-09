@@ -2,5 +2,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: auth-cm
+  labels:
+    app: auth
+    project: microservices_mp4-to-mp3-converter
 data:
-  MYSQL_HOST: host.minikube.internal
+  MYSQL_HOST: mysql-service.default.svc.cluster.local
+  MYSQL_USER: auth_user
+  MYSQL_DB: auth
+  MYSQL_PORT: "3306"

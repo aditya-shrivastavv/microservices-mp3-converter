@@ -4,10 +4,9 @@ metadata:
   name: auth
   labels:
     app: auth
-    project: microservices/mp4-to-mp3-converter
-  
+    project: microservices_mp4-to-mp3-converter
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: auth
@@ -22,7 +21,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: adityadocs/auth-project-mp3:latest
+          image: adityadocs/auth-project-encryptor:latest
           ports:
             - containerPort: 5000
           envFrom:
