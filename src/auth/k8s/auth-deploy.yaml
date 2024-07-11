@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: adityadocs/auth-project-encryptor:latest
+          image: adityadocs/auth-microservices1:latest
           ports:
             - containerPort: 5000
           envFrom:
