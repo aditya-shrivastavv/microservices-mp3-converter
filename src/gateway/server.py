@@ -19,7 +19,7 @@ connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
 channel = connection.channel()
 
 
-@server.route("'/login", methods=["POST"])
+@server.route("/login", methods=["POST"])
 def login():
     token, err = access.login(server)
 
