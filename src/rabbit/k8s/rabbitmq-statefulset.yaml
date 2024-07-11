@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    project: microservices_mp4-to-mp3-converter
+spec:
+  replicas: 2
+  serviceName: "no-applicable"
+  selector:
+    matchLabels:
+      app: rabbitmq
+      project: microservices_mp4-to-mp3-converter
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+        project: microservices_mp4-to-mp3-converter
+    spec:
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:3-management
+        ports:
+        - containerPort: 15672
+          name: http
+          protocol: TCP
+        - name: amqp   # advanced-message-queuing-protocol
+          protocol: TCP
+          containerPort: 5672
+        envFrom:
+          - configMapRef:
+              name: rabbitmq-cm
+          - secretRef:
+              name: rabbitmq-secret
+        volumeMounts:
+          - mountPath: /var/lib/rabbitmq
+            name: rabbitmq-volume
+      volumes:
+        - name: rabbitmq-volume
+          persistentVolumeClaim:
+            claimName: rabbitmq-pvc

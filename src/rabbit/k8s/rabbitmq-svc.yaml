@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    project: microservices_mp4-to-mp3-converter
+spec:
+  type: ClusterIP
+  selector:
+    app: rabbitmq
+    project: microservices_mp4-to-mp3-converter
+  ports:
+    - name: http
+      protocol: TCP
+      port: 15672
+      targetPort: 15672
+    - name: amqp   # advanced-message-queuing-protocol
+      port: 5672
+      targetPort: 5672
