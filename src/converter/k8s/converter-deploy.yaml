@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: converter
+  labels:
+    app: converter
+    project: microservices_mp4-to-mp3-converter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: converter
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 4
+  template:
+    metadata:
+      labels:
+        app: converter
+        project: microservices_mp4-to-mp3-converter
+    spec:
+      containers:
+        - name: converter
+          image: adityadocs/converter-microservices1
+          envFrom:
+            - configMapRef:
+                name: converter-cm
+            - secretRef:
+                name: converter-secret
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi

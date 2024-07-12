@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: converter-cm
+  labels:
+    app: converter
+    project: microservices_mp4-to-mp3-converter
+data:
+  MP3_QUEUE: "mp3"
+  VIDEO_QUEUE: "video"
