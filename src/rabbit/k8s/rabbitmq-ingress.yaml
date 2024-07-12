@@ -11,6 +11,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: rabbitmq-svc
+            name: rabbitmq
             port:
               number: 15672

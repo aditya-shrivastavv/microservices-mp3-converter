@@ -6,7 +6,7 @@ metadata:
     app: rabbitmq
     project: microservices_mp4-to-mp3-converter
 spec:
-  replicas: 2
+  replicas: 1
   serviceName: "no-applicable"
   selector:
     matchLabels:
