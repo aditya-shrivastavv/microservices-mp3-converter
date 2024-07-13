@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment
+  name: mysql
   labels:
     project: microservices_mp4-to-mp3-converter
 spec:
@@ -37,9 +37,6 @@ spec:
             - name: mysql-init
               mountPath: /docker-entrypoint-initdb.d
       volumes:
-        - name: secret-volume
-          secret:
-            secretName: mysql-secret
         - name: mysql-pv
           persistentVolumeClaim:
             claimName: mysql-pvc

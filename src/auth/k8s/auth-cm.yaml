@@ -6,7 +6,7 @@ metadata:
     app: auth
     project: microservices_mp4-to-mp3-converter
 data:
-  MYSQL_HOST: mysql-service.default.svc.cluster.local
-  MYSQL_USER: auth_user
+  MYSQL_HOST: mysql
+  MYSQL_USER: root
   MYSQL_DB: auth
   MYSQL_PORT: "3306"
