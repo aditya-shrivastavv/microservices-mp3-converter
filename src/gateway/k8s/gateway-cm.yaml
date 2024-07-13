@@ -6,4 +6,4 @@ metadata:
     app: gateway
     project: microservices_mp4-to-mp3-converter
 data:
-  AUTH_SVC_ADDRESS: "auth-service:5000"
+  AUTH_SVC_ADDRESS: "auth:5000"
