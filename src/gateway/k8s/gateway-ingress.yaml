@@ -3,9 +3,9 @@ kind: Ingress
 metadata:
   name: gateway-ingress
   annotations:
-    nginx.ingress.kubernetes.ip/proxy-body-size: "0"
-    nginx.ingress.kubernetes.ip/proxy-read-timeout: "600"
-    nginx.ingress.kubernetes.ip/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
   labels:
     app: gateway
     project: microservices_mp4-to-mp3-converter
