@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  labels:
+    db: mongodb
+    project: microservices_mp4-to-mp3-converter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      db: mongodb
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        db: mongodb
+        project: microservices_mp4-to-mp3-converter
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:latest
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 27017
+          envFrom:
+            - secretRef:
+                name: mongodb-secret
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongodb-pv
+      volumes:
+        - name: mongodb-pv
+          persistentVolumeClaim:
+            claimName: mongodb-pvc
+      
+          
