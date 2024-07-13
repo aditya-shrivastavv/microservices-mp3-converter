@@ -8,7 +8,12 @@ from convert import to_mp3
 
 
 def main():
-    client = MongoClient("localhost", 27017)
+    mongo_user = os.environ.get("MONGO_INITDB_ROOT_USERNAME")
+    mongo_pass = os.environ.get("MONGO_INITDB_ROOT_PASSWORD")
+    mongo_host = os.environ.get("MONGO_HOST")
+    print(f"mongodb://{mongo_user}:{mongo_pass}@{mongo_host}:27017")
+    client = MongoClient(
+        f"mongodb://{mongo_user}:{mongo_pass}@{mongo_host}:27017")
     db_videos = client.videos
     db_mp3s = client.mp3s
 
