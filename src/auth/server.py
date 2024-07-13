@@ -1,7 +1,6 @@
 import os
-from flask import Flask
+from flask import Flask, request
 from flask_mysqldb import MySQL
-from flask import request
 import jwt
 from datetime import datetime, timezone, timedelta
 
@@ -17,26 +16,6 @@ server.config["MYSQL_PORT"] = int(os.environ.get("MYSQL_PORT"))
 mysql = MySQL(server)
 
 
-# utils
-def createJWT(username, secret, is_admin):
-    return jwt.encode(
-        {
-            "username": username,
-            "exp": datetime.now(timezone.utc) + timedelta(days=1),
-            "iat": datetime.now(timezone.utc),   # Issued at
-            "admin": is_admin
-        },
-        secret,
-        algorithm="HS256",
-    )
-
-
-def decodeJWT(jwt, secret, algorithm):
-    print("jwt.decode: ", jwt.decode(jwt, secret, algorithm=[algorithm]))
-    return jwt.decode(jwt, secret, algorithm=[algorithm])
-
-
-# routes
 @server.route("/login", methods=["POST"])
 def login():
     auth = request.authorization
@@ -70,12 +49,26 @@ def validate():
     print("encoded_jwt:", encoded_jwt)
 
     try:
-        print("Trying to decode token")
-        decoded = decodeJWT(encoded_jwt, os.environ.get("JWT_SECRET"), "HS256")
-        print("decoded:", decoded)
-        return decoded, 200
+        decoded = jwt.decode(
+            encoded_jwt, os.environ.get("JWT_SECRET"), algorithms=["HS256"]
+        )
     except:
-        return {"message": "Invalid token"}, 401
+        return "not authorized", 403
+
+    return decoded, 200
+
+
+def createJWT(username, secret, is_admin):
+    return jwt.encode(
+        {
+            "username": username,
+            "exp": datetime.now(tz=timezone.utc) + timedelta(days=1),
+            "iat": datetime.now(tz=timezone.utc),
+            "admin": is_admin,
+        },
+        secret,
+        algorithm="HS256",
+    )
 
 
 if __name__ == "__main__":
