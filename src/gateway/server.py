@@ -28,9 +28,6 @@ mongo_mp3 = PyMongo(
 fs_videos = gridfs.GridFS(mongo_video.db)
 fs_mp3s = gridfs.GridFS(mongo_mp3.db)
 
-connection = pika.BlockingConnection(pika.ConnectionParameters("rabbitmq"))
-channel = connection.channel()
-
 
 @server.route("/login", methods=["POST"])
 def login():
@@ -48,6 +45,10 @@ def login():
 @server.route("/upload", methods=["POST"])
 def upload():
     print("upload request")
+
+    connection = pika.BlockingConnection(pika.ConnectionParameters("rabbitmq"))
+    channel = connection.channel()
+
     access, err = validate.token(request)
     if err:
         print("error in validate token")
@@ -64,8 +65,10 @@ def upload():
             if err:
                 return err
 
+        connection.close()
         return "success", 200
 
+    connection.close()
     return "not authorized", 401
 
 
