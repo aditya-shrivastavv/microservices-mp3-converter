@@ -4,14 +4,14 @@ import json
 
 def upload(f, fs, channel, access):
     try:
-        file_id = fs.put(f)
+        fid = fs.put(f)
     except Exception as e:
         print(e)
         return "internal server error", 500
 
     message = {
-        "video_file_id": str(file_id),
-        "mp3_file_id": None,
+        "video_fid": str(fid),
+        "mp3_fid": None,
         "username": access['username']
     }
 
@@ -26,5 +26,5 @@ def upload(f, fs, channel, access):
         )
     except Exception as e:
         print(e)
-        fs.delete(file_id)
+        fs.delete(fid)
         return "internal server error", 500

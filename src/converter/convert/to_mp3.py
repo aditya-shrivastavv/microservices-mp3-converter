@@ -13,7 +13,7 @@ def start(message, fs_videos, fs_mp3, channel):
     tf = tempfile.NamedTemporaryFile()
 
     # video content
-    out = fs_videos.get(ObjectId(message["video_file_id"]))
+    out = fs_videos.get(ObjectId(message["video_fid"]))
 
     # add video content to empty file
     tf.write(out.read())
@@ -33,7 +33,7 @@ def start(message, fs_videos, fs_mp3, channel):
 
     os.remove(tf_path)
 
-    message["mp3_file_id"] = str(fid)
+    message["mp3_fid"] = str(fid)
 
     try:
         channel.basic_publish(
