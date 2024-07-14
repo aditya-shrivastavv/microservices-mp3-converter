@@ -23,7 +23,7 @@ def start(message, fs_videos, fs_mp3, channel):
     tf.close()
 
     # write audio to mp3 file
-    tf_path = tempfile.gettempdir() + f"/{message['video_file_id']}.mp3"
+    tf_path = tempfile.gettempdir() + f"/{message['video_fid']}.mp3"
     audio.write_audiofile(tf_path)
 
     # save file to monogodb
