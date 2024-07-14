@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification
+  labels:
+    app: notification
+    project: microservices_mp4-to-mp3-converter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification
+  template:
+    metadata:
+      labels:
+        app: notification
+        project: microservices_mp4-to-mp3-converter
+    spec:
+      containers:
+      - name: notification
+        image: adityadocs/notification-microservices1:latest
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "500m"
+        envFrom:
+          - secretRef:
+              name: notication-email-secret
+          - configMapRef:
+              name: notification-cm
