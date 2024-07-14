@@ -21,7 +21,7 @@ def notify(message):
         msg["From"] = sender_address
         msg["To"] = recipient_address
 
-        session = smtplib.SMTP("smtp.gmail.com")
+        session = smtplib.SMTP("smtp.gmail.com", 587)
         session.starttls()
         session.login(sender_address, sender_pass)
         session.send_message(msg, sender_address, recipient_address)
