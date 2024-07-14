@@ -32,12 +32,6 @@ connection = pika.BlockingConnection(pika.ConnectionParameters("rabbitmq"))
 channel = connection.channel()
 
 
-@server.errorhandler(413)
-def request_entity_too_large(error):
-    print("Request Entity Too Large")
-    return 'File Too Large', 413
-
-
 @server.route("/login", methods=["POST"])
 def login():
     print("login request")
@@ -61,17 +55,18 @@ def upload():
 
     access = json.loads(access)
 
-    if not access['admin']:
-        return "not authorized", 401
-    if len(request.files) != 1:
-        return "exactly 1 file required", 400
+    if access['admin']:
+        if len(request.files) != 1:
+            return "exactly 1 file required", 400
 
-    for _, f in request.files.items():
-        err = utils.upload(f, fs_videos, channel, access)
-        if err:
-            return err
+        for _, f in request.files.items():
+            err = utils.upload(f, fs_videos, channel, access)
+            if err:
+                return err
 
-    return "success", 200
+        return "success", 200
+
+    return "not authorized", 401
 
 
 @server.route("/download", methods=["GET"])
@@ -86,7 +81,7 @@ def download():
         fid_string = request.args.get("fid")
 
         if not fid_string:
-            return "fid is required", 400
+            return "file id (fid) is required", 400
 
         try:
             out = fs_mp3s.get(ObjectId(fid_string))
