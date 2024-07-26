@@ -6,3 +6,4 @@ notification-email-secret.yaml
 keys/
 
 inventory.ini
+kube/

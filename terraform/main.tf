@@ -42,28 +42,24 @@ resource "local_file" "ansible_inventory" {
       filename = "../inventory.ini"
 }
 
-# Test the connection the execute the ansible playbooks
-resource "null_resource" "execute-playbook" {
+# Test the connection the execute the ansible playbooks (Disabled because, not easy to test)
+# resource "null_resource" "execute-playbook" {
   
-  depends_on = [
-    local_file.ansible_inventory
-  ]
+#   depends_on = [
+#     local_file.ansible_inventory
+#   ]
   
-  provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      host        = module.controller.controlplane_public_ip
-      user        = "ubuntu"
-      private_key = file(var.private_ssh_key)
-    }
+#   provisioner "remote-exec" {
+#     connection {
+#       type        = "ssh"
+#       host        = module.controller.controlplane_public_ip
+#       user        = "ubuntu"
+#       private_key = file(var.private_ssh_key)
+#     }
 
-    inline = ["echo 'connected!'"]
-  }
-  provisioner "local-exec" {
-    command     = "sleep 10"
-    interpreter = ["bash", "-c"]
-  }
-  provisioner "local-exec" { 
-    command = "wsl -d Ubuntu-22.04 -e ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ../inventory.ini --private-key ${var.private_ssh_key} /mnt/e/projects/microservices-project-mp3-converter/playbooks/main.yaml"
-  }
-}
+#     inline = ["echo 'connected!'"]
+#   }
+#   provisioner "local-exec" { 
+#     command = "wsl -d Ubuntu-22.04 -e env ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ../inventory.ini --private-key ${var.private_ssh_key} /mnt/e/projects/microservices-project-mp3-converter/playbooks/main.yaml"
+#   }
+# }

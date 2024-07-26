@@ -4,7 +4,7 @@
   register: reset_cluster
 
 - name: Create cluster with kubeadm
-  shell: sudo kubeadm init --kubernetes-version=1.28.0 --pod-network-cidr=192.168.0.0/16
+  shell: sudo kubeadm init --kubernetes-version=1.28.0 --pod-network-cidr=192.168.0.0/16 --apiserver-cert-extra-sans {{ hostvars[groups['master'][0]].ansible_host }}
   register: init_cluster
 
 - name: create .kube directory

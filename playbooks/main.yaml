@@ -39,3 +39,12 @@
           dest: "./"
     - name: execute join token
       command: sh join.sh
+
+- hosts: master
+  name: save kubeconfig to local
+  become: true
+  tasks:
+    - name: save kubeconfig to local
+      run_once: true
+      fetch: src=$HOME/.kube/config dest="{{ playbook_dir }}/../kube/" flat=yes
+          
