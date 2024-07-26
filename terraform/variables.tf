@@ -17,3 +17,6 @@ variable "key_pair_name" {
   default = "cluster_key"
 }
 
+variable "private_ssh_key" {
+  default = "../keys/accesskey"
+}

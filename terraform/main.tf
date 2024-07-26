@@ -27,37 +27,43 @@ module "workers" {
   key_pair_name     = var.key_pair_name
 }
 
-# # Write the ansible inventory
-# resource "local_file" "ansible_inventory" {
-#   depends_on = [
-#     module.controller,
-#     module.workers
-#   ]
-#     content = templatefile(
-#       "../hosts.ini",
-#       {
-#         master  = module.controller.controller_public_ip
-#         workers = module.workers.workers_public_ips
-#       })
-#       filename = "../inventory.ini"
-# }
+# Write the ansible inventory
+resource "local_file" "ansible_inventory" {
+  depends_on = [
+    module.controller,
+    module.workers
+  ]
+    content = templatefile(
+      "../hosts.ini",
+      {
+        master  = module.controller.controlplane_public_ip
+        workers = module.workers.workers_public_ips
+      })
+      filename = "../inventory.ini"
+}
 
-# # Test the connection the execute the ansible playbooks
-# resource "null_resource" "execute-playbook" {
-#   provisioner "remote-exec" {
-#     connection {
-#       type        = "ssh"
-#       host        = module.controller.controller_public_ip
-#       user        = "ubuntu"
-#       private_key = file(var.private_ssh_key)
-#     }
+# Test the connection the execute the ansible playbooks
+resource "null_resource" "execute-playbook" {
+  
+  depends_on = [
+    local_file.ansible_inventory
+  ]
+  
+  provisioner "remote-exec" {
+    connection {
+      type        = "ssh"
+      host        = module.controller.controlplane_public_ip
+      user        = "ubuntu"
+      private_key = file(var.private_ssh_key)
+    }
 
-#     inline = ["echo 'connected!'"]
-#   }
-#   depends_on = [
-#     local_file.ansible_inventory
-#   ]
-#   provisioner "local-exec" {
-#     command = "ansible-playbook -i ../inventory.ini --private-key ${var.private_ssh_key} '${path.cwd}/../ansible-install-k8s/main.yaml'"
-#   }
-# }
+    inline = ["echo 'connected!'"]
+  }
+  provisioner "local-exec" {
+    command     = "sleep 10"
+    interpreter = ["bash", "-c"]
+  }
+  provisioner "local-exec" { 
+    command = "wsl -d Ubuntu-22.04 -e ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ../inventory.ini --private-key ${var.private_ssh_key} /mnt/e/projects/microservices-project-mp3-converter/playbooks/main.yaml"
+  }
+}
