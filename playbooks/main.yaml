@@ -47,4 +47,10 @@
     - name: save kubeconfig to local
       run_once: true
       fetch: src=$HOME/.kube/config dest="{{ playbook_dir }}/../kube/" flat=yes
-          
+
+#---------- Deploy microservices
+# - hosts: master
+#   name: Deploy microservices
+#   become: true
+#   roles:
+#     - { role: deploy-microservices, tags: deploy-microservices }
