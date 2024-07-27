@@ -29,6 +29,9 @@ spec:
             - secretRef:
                 name: converter-secret
           resources:
+            requests:
+              cpu: "50m"
+              memory: "200Mi"
             limits:
-              cpu: 500m
-              memory: 500Mi
+              cpu: "200m"
+              memory: "400Mi"

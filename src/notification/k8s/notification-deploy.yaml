@@ -20,9 +20,12 @@ spec:
       - name: notification
         image: adityadocs/notification-microservices1:latest
         resources:
+          requests:
+            memory: "64Mi"
+            cpu: "25m"
           limits:
-            memory: "500Mi"
-            cpu: "500m"
+            memory: "64Mi"
+            cpu: "80m"
         envFrom:
           - secretRef:
               name: notication-email-secret

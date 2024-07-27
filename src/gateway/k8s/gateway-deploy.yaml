@@ -31,8 +31,8 @@ spec:
                 name: gateway-secret
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "250m"
+              cpu: "50m"
+              memory: "200Mi"
             limits:
-              memory: "128Mi"
-              cpu: "500m"
+              cpu: "200m"
+              memory: "400Mi"

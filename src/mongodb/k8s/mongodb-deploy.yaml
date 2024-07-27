@@ -24,6 +24,9 @@ spec:
         - name: mongodb
           image: mongo:latest
           resources:
+            requests:
+              cpu: "50m"
+              memory: "250Mi"
             limits:
               memory: "500Mi"
               cpu: "500m"

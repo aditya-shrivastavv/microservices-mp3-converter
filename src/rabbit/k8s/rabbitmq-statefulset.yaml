@@ -36,6 +36,13 @@ spec:
         volumeMounts:
           - mountPath: /var/lib/rabbitmq
             name: rabbitmq-volume
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "200Mi"
+          limits:
+            cpu: "200m"
+            memory: "400Mi"
       volumes:
         - name: rabbitmq-volume
           persistentVolumeClaim:
