@@ -47,6 +47,17 @@ resource "aws_security_group" "allow_tls_http_ssh" {
       self             = false
       security_groups  = []
       prefix_list_ids  = []
+    },
+    {
+      description = "Allow all internal traffic"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = [data.aws_vpc.default_vpc.cidr_block]
+      ipv6_cidr_blocks = ["::/0"]
+      self             = false
+      security_groups  = []
+      prefix_list_ids  = []
     }
   ]
 

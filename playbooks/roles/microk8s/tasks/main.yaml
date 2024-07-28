@@ -1,0 +1,21 @@
+---
+- name: Install kubectl command line utility
+  community.general.snap:
+    name: kubectl
+    state: present
+    classic: yes
+    channel: 1.30/stable
+
+- name: Enable microk8s addons
+  shell: |
+    microk8s enable ingress
+    microk8s enable dns
+    microk8s enable hostpath-storage
+
+- name: Create .kube directory
+  file:
+    path: $HOME/.kube
+    state: directory
+
+- name: Save kubeconfig to .kube/config
+  shell: microk8s config > $HOME/.kube/config

@@ -1,9 +1,0 @@
-- hosts: localhost
-  name: change private ip to public ip in kubeconfig
-  tasks:
-    - name: change private ip to public ip in kubeconfig
-      ansible.builtin.lineinfile:
-        path: "{{ playbook_dir }}/../kube/config"
-        regexp: '    server: https://.*'
-        line: "    server: https://{{ hostvars[groups['master'][0]].ansible_host }}:6443"
-      become: false
