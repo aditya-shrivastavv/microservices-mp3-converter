@@ -19,20 +19,10 @@
   name: Join workers to the cluster
   become: true
   serial: 1
-  tasks:
-  - name: Generate join token on master
-    delegate_to: "{{ groups['master'][0] }}"
-    shell: microk8s add-node | head -n 5 | tail -n 1 > $HOME/add-node.sh
-    become: true
-  - name: Fetch join token to local
-    delegate_to: "{{ groups['master'][0] }}"
-    fetch:
-      src: $HOME/add-node.sh
-      dest: "{{ playbook_dir }}/buffer/"
-      flat: yes
-  - name: Copy join command to workers
-    copy: 
-      src: "{{ playbook_dir }}/buffer/add-node.sh"
-      dest: "$HOME/microk8s/"
-  - name: Execute join command
-    command: sh $HOME/microk8s/add-node.sh
+  roles:
+  - { role: join-workers, tags: join-workers }
+
+- hosts: master
+  name: Deploy microservices
+  roles:
+  - { role: deploy-microservices, tags: deploy-microservices }

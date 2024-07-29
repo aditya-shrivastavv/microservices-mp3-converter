@@ -1,0 +1,32 @@
+- name: Clone git repository
+  ansible.builtin.git:
+    repo: https://github.com/aditya-shrivastavv/microservices-project-mp3-converter.git
+    dest: "{{ ansible_env.HOME }}/microservices-project-mp3-converter"
+    clone: yes
+  
+- name: Deploy rabbitmq, mysql, mongodb
+  shell: |
+    kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/src/rabbit/k8s/
+    kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/src/mysql/k8s/
+    kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/src/mongodb/k8s/
+
+# If does't work, use sleep 30s
+- name: Wait for rabbitmq to be ready
+  shell: "kubectl wait --for=condition=ready pod -l app=rabbitmq --timeout=300s"
+
+- name: Make video, mp3 queue in rabbitmq
+  shell: |
+    kubectl exec rabbitmq-0 -- rabbitmqadmin declare queue name=video durable=true
+    kubectl exec rabbitmq-0 -- rabbitmqadmin declare queue name=mp3 durable=true
+
+- name: Deploy auth, notification, converter, gateway
+  shell: "kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/src/{{ item }}/k8s/"
+  loop:
+    - auth
+    - notification
+    - converter
+    - gateway
+
+- name: Congratulations
+  debug:
+    msg: "Microservices deployment complete! "

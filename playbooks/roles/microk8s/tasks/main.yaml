@@ -13,9 +13,14 @@
     microk8s enable hostpath-storage
 
 - name: Create .kube directory
-  file:
-    path: $HOME/.kube
+  ansible.builtin.file:
+    path: "/home/ubuntu/.kube"
     state: directory
+    mode: "0755"
+    owner: ubuntu
+    group: ubuntu
 
 - name: Save kubeconfig to .kube/config
-  shell: microk8s config > $HOME/.kube/config
+  shell: microk8s config > /home/ubuntu/.kube/config
+  args:
+    creates: "/home/ubuntu/.kube/config"

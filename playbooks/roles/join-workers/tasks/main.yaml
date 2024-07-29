@@ -1,0 +1,19 @@
+- name: Generate join token on master
+  delegate_to: "{{ groups['master'][0] }}"
+  become: true
+  shell: "microk8s add-node | head -n 5 | tail -n 1 > /home/ubuntu/add-node.sh"
+
+- name: Fetch join token to local
+  delegate_to: "{{ groups['master'][0] }}"
+  fetch:
+    src: "/home/ubuntu/add-node.sh"
+    dest: "{{ playbook_dir }}/buffer/"
+    flat: yes
+
+- name: Copy join command to workers
+  copy:
+    src: "{{ playbook_dir }}/buffer/add-node.sh"
+    dest: "/home/ubuntu/microk8s/"
+
+- name: Execute join command
+  command: "sh /home/ubuntu/microk8s/add-node.sh"
