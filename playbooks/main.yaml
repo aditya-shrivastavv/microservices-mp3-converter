@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: [master, workers]
   name: Install microk8s
   become: true
   tasks:
@@ -15,6 +15,12 @@
   roles:
   - { role: microk8s, tags: microk8s }
 
+- hosts: master
+  name: Install Helm
+  become: true
+  roles:
+  - { role: helm-setup, tags: "helm-setup" }
+
 - hosts: workers
   name: Join workers to the cluster
   become: true
@@ -26,3 +32,14 @@
   name: Deploy microservices
   roles:
   - { role: deploy-microservices, tags: deploy-microservices }
+
+#---------- Local
+- hosts: localhost
+  name: change private ip to public ip in kubeconfig
+  tasks:
+    - name: change private ip to public ip in kubeconfig
+      ansible.builtin.lineinfile:
+        path: "{{ playbook_dir }}/../kube/config"
+        regexp: '    server: https://.*'
+        line: "    server: https://{{ hostvars[groups['master'][0]].ansible_host }}:16443"
+      become: false
