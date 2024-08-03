@@ -45,6 +45,6 @@ spec:
             command: ["rabbitmqadmin", "list", "vhosts"]
           initialDelaySeconds: 5
           periodSeconds: 5
-          timeoutSeconds: 30
+          timeoutSeconds: 60
           
 
