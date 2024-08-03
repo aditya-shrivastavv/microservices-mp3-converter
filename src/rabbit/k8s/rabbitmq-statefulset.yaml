@@ -33,9 +33,6 @@ spec:
               name: rabbitmq-cm
           - secretRef:
               name: rabbitmq-secret
-        # volumeMounts:
-        #   - mountPath: /var/lib/rabbitmq
-        #     name: rabbitmq-volume
         resources:
           requests:
             cpu: "50m"
@@ -43,7 +40,11 @@ spec:
           limits:
             cpu: "200m"
             memory: "400Mi"
-      # volumes:
-      #   - name: rabbitmq-volume
-      #     persistentVolumeClaim:
-      #       claimName: rabbitmq-pvc
+        readinessProbe:
+          exec: 
+            command: ["rabbitmqadmin", "list", "vhosts"]
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 30
+          
+
