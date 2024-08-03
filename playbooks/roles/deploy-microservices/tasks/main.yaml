@@ -6,9 +6,11 @@
   
 - name: Deploy rabbitmq, mysql, mongodb
   shell: |
-    kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/src/rabbit/k8s/
-    kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/src/mysql/k8s/
-    kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/src/mongodb/k8s/
+    kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/src/{{ item }}/k8s/
+  loop:
+    - rabbit
+    - mysql
+    - mongodb
 
 # If does't work, use sleep 30s
 - name: Wait for rabbitmq to be ready
