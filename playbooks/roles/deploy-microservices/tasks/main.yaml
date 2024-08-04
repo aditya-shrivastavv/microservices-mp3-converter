@@ -4,9 +4,13 @@
     dest: "{{ ansible_env.HOME }}/microservices-project-mp3-converter"
     clone: yes
   
+- name: Create all secrets
+  shell: |
+    kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/kubernetes/secrets/
+
 - name: Deploy rabbitmq, mysql, mongodb
   shell: |
-    kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/src/{{ item }}/k8s/
+    kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/kubernetes/manifests/{{ item }}/
   loop:
     - rabbit
     - mysql
@@ -22,7 +26,8 @@
     kubectl exec rabbitmq-0 -- rabbitmqadmin declare queue name=mp3 durable=true
 
 - name: Deploy auth, notification, converter, gateway
-  shell: "kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/src/{{ item }}/k8s/"
+  shell: |
+    kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/kubernetes/manifests/{{ item }}/
   loop:
     - auth
     - notification
