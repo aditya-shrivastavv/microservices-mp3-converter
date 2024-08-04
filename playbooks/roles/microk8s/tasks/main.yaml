@@ -19,6 +19,10 @@
     line: "IP.100 = {{ ansible_host }}"
     state: present
 
+- name: Cooldown for 5 seconds
+  ansible.builtin.wait_for:
+    timeout: 5
+
 - name: Refresh server cert
   shell: microk8s refresh-certs -e ca.crt
 

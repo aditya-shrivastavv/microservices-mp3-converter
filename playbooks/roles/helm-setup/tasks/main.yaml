@@ -1,8 +1,3 @@
-# - name: Add Helm GPG key
-#   ansible.builtin.command:
-#     cmd: curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null
-#     args:
-#       warn: false
 - name: Add Helm GPG key
   ansible.builtin.apt_key:
     url: https://baltocdn.com/helm/signing.asc
@@ -13,12 +8,6 @@
   ansible.builtin.apt:
     name: apt-transport-https
     state: present
-
-# - name: Add Helm apt repository
-#   ansible.builtin.apt_repository:
-#     repo: "deb [arch={{ ansible_architecture }} signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main"
-#     filename: helm-stable-debian
-#     state: present
 
 - name: Add Helm repository
   ansible.builtin.apt_repository:
@@ -38,3 +27,25 @@
     namespace: kube-system
     kubeconfig: /home/ubuntu/.kube/config
     
+- name: Copy kubeseal certs
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../keys/kubeseal/"
+    dest: /home/ubuntu/.kube/kubeseal-certs/
+    owner: ubuntu
+    group: ubuntu
+    mode: 0755
+
+- name: Create kubeseal cert TLS secrets
+  become: false
+  shell: |
+    kubectl -n kube-system create secret tls kubeseal-seal-secret --cert /home/ubuntu/.kube/kubeseal-certs/tls.crt --key /home/ubuntu/.kube/kubeseal-certs/tls.key
+
+- name: Label kubeseal cert TLS secrets
+  become: false
+  shell: |
+    kubectl -n kube-system label secret kubeseal-seal-secret sealedsecrets.bitnami.com/sealed-secrets-key=active
+  
+- name: Refresh kubeseal controller pod
+  become: false
+  shell: |
+    kubectl -n kube-system delete pod -l app.kubernetes.io/name=sealed-secrets
