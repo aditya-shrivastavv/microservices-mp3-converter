@@ -2,10 +2,11 @@ venv/
 .env*
 __pycache__/
 
-notification-email-secret.yaml
 keys/
 
 inventory.ini
 kube/
 
-helm/
+buffer/
+
+open-secrets/
