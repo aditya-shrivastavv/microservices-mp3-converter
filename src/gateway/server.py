@@ -29,6 +29,19 @@ fs_videos = gridfs.GridFS(mongo_video.db)
 fs_mp3s = gridfs.GridFS(mongo_mp3.db)
 
 
+@server.route("/register", methods=["POST"])
+def register():
+    print("register request")
+    err = access.register(request)
+
+    if not err:
+        print("register success")
+        return "success", 200
+    else:
+        print("register failed")
+        return err
+
+
 @server.route("/login", methods=["POST"])
 def login():
     print("login request")

@@ -16,6 +16,28 @@ server.config["MYSQL_PORT"] = int(os.environ.get("MYSQL_PORT"))
 mysql = MySQL(server)
 
 
+@server.route("/register", methods=["POST"])
+def register():
+    auth = request.authorization
+    print("auth:", auth)
+    if not auth:
+        return {"message": "Missing username or password"}, 401
+
+    cur = mysql.connection.cursor()
+    res = cur.execute(
+        "INSERT INTO user (email, password) VALUES (%s, %s)", (
+            auth.username, auth.password, )
+    )
+    mysql.connection.commit()
+
+    if res == 0:
+        print("register failed: User already exists")
+        return {"message": "User already exists"}, 401
+    else:
+        print("register success")
+        return createJWT(auth.username, os.environ.get("JWT_SECRET"), False)
+
+
 @server.route("/login", methods=["POST"])
 def login():
     auth = request.authorization
