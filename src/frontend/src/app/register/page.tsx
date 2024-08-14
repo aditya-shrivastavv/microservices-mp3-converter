@@ -96,7 +96,7 @@ export default function Home() {
         {...register('username', { required: true })}
         type="text"
         placeholder="Username"
-        className={`block px-4 py-3 mb-3 w-full border transition-all rounded-sm text-gray-700 ${
+        className={`block px-3 py-2 mb-3 w-full border transition-all rounded-sm text-gray-700 ${
           isLoggedIn && 'cursor-not-allowed'
         }`}
         autoFocus
@@ -117,7 +117,7 @@ export default function Home() {
         placeholder="Password"
         disabled={isLoggedIn}
         required
-        className={`block px-4 py-3 mb-3 w-full border transition-all rounded-sm text-gray-700 ${
+        className={`block px-3 py-2 mb-3 w-full border transition-all rounded-sm text-gray-700 ${
           isLoggedIn && 'cursor-not-allowed'
         }`}
       />
@@ -129,7 +129,7 @@ export default function Home() {
         required
         disabled={isLoggedIn}
         placeholder="Confirm password"
-        className={`block px-4 py-3 mb-3 w-full border transition-all rounded-sm text-gray-700 ${
+        className={`block px-3 py-2 mb-3 w-full border transition-all rounded-sm text-gray-700 ${
           isLoggedIn && 'cursor-not-allowed'
         }`}
       />

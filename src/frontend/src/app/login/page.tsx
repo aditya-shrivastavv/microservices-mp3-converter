@@ -85,7 +85,7 @@ export default function Home() {
         {...register('username', { required: true })}
         type="text"
         placeholder="Username"
-        className={`block px-4 py-3 mb-3 w-full border transition-all rounded-sm text-gray-700 ${
+        className={`block px-3 py-2 mb-3 w-full border transition-all rounded-sm text-gray-700 ${
           isLoggedIn && 'cursor-not-allowed'
         }`}
         disabled={isLoggedIn}
@@ -100,7 +100,7 @@ export default function Home() {
         placeholder="Password"
         required
         disabled={isLoggedIn}
-        className={`block px-4 py-3 mb-3 w-full border transition-all rounded-sm text-gray-700 ${
+        className={`block px-3 py-2 mb-3 w-full border transition-all rounded-sm text-gray-700 ${
           isLoggedIn && 'cursor-not-allowed'
         }`}
       />

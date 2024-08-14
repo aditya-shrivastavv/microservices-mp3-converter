@@ -89,7 +89,7 @@ export default function Home() {
         {...register('fid', { required: true })}
         type="text"
         placeholder="File Id"
-        className={`block px-4 py-3 mb-3 w-full border transition-all rounded-sm text-gray-700pass`}
+        className={`block px-3 py-2 mb-3 w-full border transition-all rounded-sm text-gray-700pass`}
         autoFocus
       />
       {errors.fid && <FormError message={errors.fid.message!} />}
