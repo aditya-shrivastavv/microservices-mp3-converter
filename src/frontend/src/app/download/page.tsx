@@ -5,6 +5,9 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { FaCheckCircle, FaExclamationCircle } from 'react-icons/fa'
 import FormError from '@/components/FormErrorMessage'
 import getLoginStatus from '@/lib/getLoginStatus'
+import axios from 'axios'
+import Config from '@/config/main'
+import download from 'downloadjs'
 
 type DownloadFormInputs = {
   fid: string
@@ -28,12 +31,34 @@ export default function Home() {
     formState: { errors },
   } = useForm<DownloadFormInputs>()
 
-  const onSubmit: SubmitHandler<DownloadFormInputs> = (data) => {
+  const onSubmit: SubmitHandler<DownloadFormInputs> = async (data) => {
     try {
       setLoading(true)
       console.log(data)
-    } catch (error) {
+      const response = await axios.get(
+        Config.API_URL + '/download?fid=' + data.fid,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+          responseType: 'blob',
+        },
+      )
+      download(new Blob([response.data]), data.fid + '.mp3')
+    } catch (error: any) {
       console.error(error)
+      if (error.response.status === 401) {
+        setError('fid', {
+          type: 'manual',
+          message: 'You are not authorized to download this file',
+        })
+      } else if (error.response.status === 500) {
+        setError('fid', {
+          type: 'manual',
+          message: 'File not found',
+        })
+      }
     } finally {
       setLoading(false)
     }
@@ -63,10 +88,11 @@ export default function Home() {
       <input
         {...register('fid', { required: true })}
         type="text"
-        placeholder="Username"
+        placeholder="File Id"
         className={`block px-4 py-3 mb-3 w-full border transition-all rounded-sm text-gray-700pass`}
         autoFocus
       />
+      {errors.fid && <FormError message={errors.fid.message!} />}
       <a href="/upload" className="text-sm text-cyan-500 hover:underline">
         File upload?
       </a>
