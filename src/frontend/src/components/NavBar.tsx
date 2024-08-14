@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 type Props = {}
 
@@ -25,10 +25,21 @@ const links = [
 
 const NavBar = (props: Props) => {
   const pathname = usePathname()
+  const router = useRouter()
 
   const logout = () => {
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      return
+    }
+
     localStorage.removeItem('token')
-    location.reload()
+    if (pathname === '/login') {
+      location.reload()
+    } else {
+      router.push('/login')
+    }
   }
 
   return (
@@ -48,7 +59,7 @@ const NavBar = (props: Props) => {
           </a>
         ))}
         <button
-          className="bg-red-600 px-4 rounded-full font-bold shadow-2xl"
+          className="bg-red-600 px-4 rounded-full font-bold shadow-2xl hover:bg-red-400"
           onClick={() => logout()}
         >
           Logout
