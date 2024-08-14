@@ -4,7 +4,19 @@ import os
 from send import email
 
 
+def test_rabbitmq_connection():
+    try:
+        connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host='rabbitmq')
+        )
+        connection.close()
+        print("RabbitMQ connection successful")
+    except pika.exceptions.AMQPConnectionError:
+        print("Failed to connect to RabbitMQ")
+
+
 def main():
+    test_rabbitmq_connection()
     connection = pika.BlockingConnection(
         pika.ConnectionParameters(host='rabbitmq')
     )
