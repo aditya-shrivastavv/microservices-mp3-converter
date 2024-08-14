@@ -33,6 +33,7 @@
     - notification
     - converter
     - gateway
+    - frontend
 
 - name: Congratulations
   debug:
