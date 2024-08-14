@@ -3,6 +3,7 @@ import gridfs
 import pika
 import json
 from flask import Flask, request, send_file
+from flask_cors import CORS
 from flask_pymongo import PyMongo
 from auth import validate
 from auth_svc import access
@@ -10,6 +11,7 @@ from storage import utils
 from bson.objectid import ObjectId
 
 server = Flask(__name__)
+CORS(server)
 
 mongo_user = os.environ.get("MONGO_INITDB_ROOT_USERNAME")
 mongo_pass = os.environ.get("MONGO_INITDB_ROOT_PASSWORD")
