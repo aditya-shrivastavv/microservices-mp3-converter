@@ -25,7 +25,7 @@
     kubectl exec rabbitmq-0 -- rabbitmqadmin declare queue name=video durable=true
     kubectl exec rabbitmq-0 -- rabbitmqadmin declare queue name=mp3 durable=true
 
-- name: Deploy auth, notification, converter, gateway
+- name: Deploy auth, notification, converter, gateway, frontend
   shell: |
     kubectl apply -f {{ ansible_env.HOME }}/microservices-project-mp3-converter/kubernetes/manifests/{{ item }}/
   loop:
