@@ -1,8 +1,22 @@
-import Config from '@/config/main'
 import { NextRequest } from 'next/server'
+import dns from 'dns'
 
-const gatewayUrl = Config.API_URL
+function getGatewayUrl() {
+  return new Promise((resolve, reject) => {
+    dns.lookup('gateway-service', (err, address) => {
+      if (err) {
+        console.log('Error: ', err)
+        reject(err)
+      } else {
+        console.log('Address: ', address)
+        const gatewayUrl = `http://${address}`
+        resolve(gatewayUrl)
+      }
+    })
+  })
+}
 
-export function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
+  const gatewayUrl = (await getGatewayUrl()) as string
   return new Response(gatewayUrl, { status: 200 })
 }

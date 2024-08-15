@@ -31,6 +31,7 @@ export default function Home() {
     try {
       setLoading(true)
       const serverIP = (await axios.get('/api/server')).data
+      console.log('serverIP: ' + serverIP)
       const response = await axios.post(
         serverIP + '/login',
         {},
