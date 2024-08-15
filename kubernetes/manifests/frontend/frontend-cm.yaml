@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: frontend-cm
 data:
-  GATEWAY_API: gateway-service
+  GATEWAY_ADDRESS: ${GATEWAY_ADDRESS}
