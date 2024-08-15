@@ -15,5 +15,5 @@ variable "key_pair_name" {
 }
 
 variable "instance_type" {
-  default = "t2.medium"
+  default = "t3.medium"
 }
