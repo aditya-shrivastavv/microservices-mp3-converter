@@ -13,7 +13,7 @@ resource "aws_instance" "workers" {
   }
 
   tags = {
-    Name      = "worker_${count.index}"
+    Name      = "worker_${count.index + 1}"
     terraform = "true"
     project   = "kube-auto"
   }
