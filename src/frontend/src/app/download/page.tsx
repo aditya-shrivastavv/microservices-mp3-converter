@@ -28,6 +28,7 @@ export default function Home() {
     register,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
   } = useForm<DownloadFormInputs>()
 
@@ -35,17 +36,16 @@ export default function Home() {
     try {
       setLoading(true)
       console.log(data)
-      const response = await axios.get(
-        Config.API_URL + '/download?fid=' + data.fid,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
-          },
-          responseType: 'blob',
+      const serverIP = (await axios.get('/api/server')).data
+      const response = await axios.get(serverIP + '/download?fid=' + data.fid, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
         },
-      )
+        responseType: 'blob',
+      })
       download(new Blob([response.data]), data.fid + '.mp3')
+      reset()
     } catch (error: any) {
       console.error(error)
       if (error.response.status === 401) {
@@ -89,7 +89,7 @@ export default function Home() {
         {...register('fid', { required: true })}
         type="text"
         placeholder="File Id"
-        className={`block px-3 py-2 mb-3 w-full border transition-all rounded-sm text-gray-700pass`}
+        className={`block px-3 py-2 mb-3 w-full border transition-all rounded-sm text-gray-700`}
         autoFocus
       />
       {errors.fid && <FormError message={errors.fid.message!} />}

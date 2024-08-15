@@ -49,9 +49,10 @@ export default function Home() {
         return
       }
 
-      // Request
+      const serverIP = (await axios.get('/api/server')).data
+      console.log(serverIP)
       const response = await axios.post(
-        Config.API_URL + '/register',
+        serverIP + '/register',
         {},
         {
           auth: {

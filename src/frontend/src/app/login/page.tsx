@@ -30,8 +30,9 @@ export default function Home() {
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
       setLoading(true)
+      const serverIP = (await axios.get('/api/server')).data
       const response = await axios.post(
-        Config.API_URL + '/login',
+        serverIP + '/login',
         {},
         {
           auth: {

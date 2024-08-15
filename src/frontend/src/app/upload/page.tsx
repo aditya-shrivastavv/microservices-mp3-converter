@@ -70,8 +70,9 @@ export default function Home() {
     try {
       setLoading(true)
       console.log(acceptedFiles[0].name)
+      const serverIP = (await axios.get('/api/server')).data
       const response = await axios.post(
-        Config.API_URL + '/upload',
+        serverIP + '/upload',
         {
           file: acceptedFiles[0],
         },
