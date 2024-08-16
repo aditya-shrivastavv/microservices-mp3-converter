@@ -28,15 +28,6 @@
   roles:
   - { role: join-workers, tags: join-workers }
 
-- hosts: localhost
-  name: Put server IP address in frontend configmap
-  tasks:
-  - name: Put server IP address in frontend configmap
-    ansible.builtin.lineinfile:
-      path: "{{ playbook_dir }}/../kubernetes/manifests/frontend/frontend-cm.yaml"
-      regexp: '  GATEWAY_ADDRESS: .*'
-      line: "  GATEWAY_ADDRESS: {{ hostvars[groups['master'][0]].ansible_host }}"
-
 - hosts: master
   name: Deploy microservices
   roles:

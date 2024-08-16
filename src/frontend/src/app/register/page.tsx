@@ -48,6 +48,7 @@ export default function Home() {
       }
 
       const gatewayIP = (await axios.get('/api/server')).data
+      console.log('gatewayIP: ', gatewayIP)
       const response = await axios.post(
         '/api/register',
         {

@@ -24,9 +24,6 @@ spec:
           image: adityadocs/frontend-microservices1:latest
           ports:
             - containerPort: 3000
-          envFrom:
-            - configMapRef:
-                name: frontend-cm
           resources:
             requests:
               cpu: "200m"
