@@ -11,7 +11,7 @@ function getGatewayUrl() {
       } else {
         console.log('Address: ', address)
         const gatewayUrl = `http://${address}`
-        resolve(gatewayUrl)
+        resolve(address)
       }
     })
   })
