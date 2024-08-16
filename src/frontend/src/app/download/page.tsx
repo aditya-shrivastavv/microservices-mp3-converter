@@ -6,7 +6,6 @@ import { FaCheckCircle, FaExclamationCircle } from 'react-icons/fa'
 import FormError from '@/components/FormErrorMessage'
 import getLoginStatus from '@/lib/getLoginStatus'
 import axios from 'axios'
-import Config from '@/config/main'
 import download from 'downloadjs'
 
 type DownloadFormInputs = {
@@ -35,16 +34,23 @@ export default function Home() {
   const onSubmit: SubmitHandler<DownloadFormInputs> = async (data) => {
     try {
       setLoading(true)
-      console.log(data)
-      const serverIP = (await axios.get('/api/server')).data
-      const response = await axios.get(serverIP + '/download?fid=' + data.fid, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
+
+      const gatewayIP = (await axios.get('/api/server')).data
+      const response = await axios.post(
+        '/api/download',
+        {
+          fid: data.fid,
+          gatewayIP,
         },
-        responseType: 'blob',
-      })
-      download(new Blob([response.data]), data.fid + '.mp3')
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'multipart/form-data',
+          },
+          responseType: 'blob',
+        },
+      )
+      download(response.data, data.fid + '.mp3', 'audio/mp3')
       reset()
     } catch (error: any) {
       console.error(error)

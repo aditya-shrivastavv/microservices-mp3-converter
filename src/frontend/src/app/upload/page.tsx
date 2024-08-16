@@ -7,8 +7,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useDropzone } from 'react-dropzone'
 import { IoIosRemoveCircle } from 'react-icons/io'
 import styled from 'styled-components'
-import Config from '@/config/main'
 import axios from 'axios'
+import FormError from '@/components/FormErrorMessage'
 
 const getColor = (props: any) => {
   if (props.isDragAccept) {
@@ -47,7 +47,12 @@ export default function Home() {
   const [loginStatusMessage, setLoginStatusMessage] = useState('')
   const [isFileUploaded, setIsFileUploaded] = useState(false)
 
-  const { handleSubmit, register } = useForm()
+  const {
+    handleSubmit,
+    register,
+    setError,
+    formState: { errors },
+  } = useForm()
 
   const {
     getRootProps,
@@ -66,15 +71,33 @@ export default function Home() {
     setLoginStatusMessage(loginStatus.message)
   }, [])
 
+  useEffect(() => {
+    if (acceptedFiles.length == 1) {
+      setIsFileUploaded(false)
+    }
+  }, [acceptedFiles.length])
+
   const onSubmit: SubmitHandler<any> = async (data) => {
     try {
       setLoading(true)
+      setIsFileUploaded(false)
+
+      if (acceptedFiles.length == 0) {
+        setError('file', {
+          type: 'manual',
+          message: 'Please select a file first before continuing',
+        })
+        return
+      }
+
       console.log(acceptedFiles[0].name)
-      const serverIP = (await axios.get('/api/server')).data
+      console.log(typeof acceptedFiles[0].name)
+      const gatewayIP = (await axios.get('/api/server')).data
       const response = await axios.post(
-        serverIP + '/upload',
+        '/api/upload',
         {
           file: acceptedFiles[0],
+          gatewayIP,
         },
         {
           headers: {
@@ -86,9 +109,14 @@ export default function Home() {
       console.log(response)
       if (response.status == 200) {
         setIsFileUploaded(true)
+        acceptedFiles.splice(0, 1)
       }
     } catch (error: any) {
       console.error(error)
+      setError('file', {
+        type: 'manual',
+        message: error.response.data,
+      })
     } finally {
       setLoading(false)
     }
@@ -139,6 +167,7 @@ export default function Home() {
           </span>
         )}
       </div>
+      {errors.file && <FormError message={errors.file.message! as string} />}
       <a href="/download" className="text-sm text-cyan-500 hover:underline">
         Download file?
       </a>

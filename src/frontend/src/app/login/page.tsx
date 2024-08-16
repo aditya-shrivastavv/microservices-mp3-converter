@@ -1,7 +1,6 @@
 'use client'
 import FormError from '@/components/FormErrorMessage'
 import Button from '@/components/ui/Button'
-import Config from '@/config/main'
 import getLoginStatus from '@/lib/getLoginStatus'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
@@ -30,11 +29,12 @@ export default function Home() {
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     try {
       setLoading(true)
-      const serverIP = (await axios.get('/api/server')).data
-      console.log('serverIP: ' + serverIP)
+      const gatewayIP = (await axios.get('/api/server')).data
       const response = await axios.post(
-        serverIP + '/login',
-        {},
+        '/api/login',
+        {
+          gatewayIP,
+        },
         {
           auth: {
             username: data.username,
@@ -42,22 +42,24 @@ export default function Home() {
           },
         },
       )
-      console.log(response)
       if (response.status == 200) {
         localStorage.setItem('token', response.data)
         setIsLoggedIn(true)
       }
-      console.log('response: ' + response)
       location.reload()
     } catch (error: any) {
       console.error(error)
       if (error.response.status == 401) {
         setError('username', {
           type: 'manual',
-          message: 'Invalid username or password',
+          message: error.response.data,
         })
         return
       }
+      setError('username', {
+        type: 'manual',
+        message: error.response.data,
+      })
     } finally {
       setLoading(false)
     }

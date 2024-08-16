@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import FormError from '@/components/FormErrorMessage'
 import axios from 'axios'
-import Config from '@/config/main'
 import { FaCheckCircle, FaExclamationCircle } from 'react-icons/fa'
 import getLoginStatus from '@/lib/getLoginStatus'
 
@@ -19,12 +18,12 @@ export default function Home() {
   const [isRegistered, setIsRegistered] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [loginStatusMessage, setLoginStatusMessage] = useState('')
-  const [registrationError, setRegisterationError] = useState(false)
 
   const {
     register,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
   } = useForm<RegisterFormInputs>()
 
@@ -38,7 +37,6 @@ export default function Home() {
     try {
       setLoading(true)
       setIsRegistered(false)
-      setRegisterationError(false)
 
       // Pre Validations
       if (data.password !== data.confirmPassword) {
@@ -49,11 +47,12 @@ export default function Home() {
         return
       }
 
-      const serverIP = (await axios.get('/api/server')).data
-      console.log(serverIP)
+      const gatewayIP = (await axios.get('/api/server')).data
       const response = await axios.post(
-        serverIP + '/register',
-        {},
+        '/api/register',
+        {
+          gatewayIP,
+        },
         {
           auth: {
             username: data.username,
@@ -61,12 +60,24 @@ export default function Home() {
           },
         },
       )
+      console.log('response: ', response)
       if (response.status == 200) {
         setIsRegistered(true)
+        reset()
+        return
       }
     } catch (error: any) {
-      setRegisterationError(true)
-      console.error(error)
+      if (error.response.status == 500) {
+        setError('username', {
+          type: 'manual',
+          message: error.response.data,
+        })
+        return
+      }
+      setError('root', {
+        type: 'manual',
+        message: error.response.data,
+      })
     } finally {
       setLoading(false)
     }
@@ -104,12 +115,7 @@ export default function Home() {
         disabled={isLoggedIn}
         required
       />
-      {registrationError && (
-        <p className="text-red-500 text-sm mb-4">
-          <FaExclamationCircle className="inline-block mr-1" />
-          Username exists!{' '}
-        </p>
-      )}
+      {errors.username && <FormError message={errors.username.message!} />}
 
       {/* Password */}
       <input
