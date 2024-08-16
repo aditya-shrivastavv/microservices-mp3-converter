@@ -1,6 +1,6 @@
 # Microservices Mp3 Converter
 
-![architecture](./public/imgs/architecture.png)
+![architecture](./public/imgs/architecture-diagram.png)
 
 volumes: The ./mysql:/docker-entrypoint-initdb.d line mounts the mysql directory from your host
  (which contains your init.sql) to the container's /docker-entrypoint-initdb.d directory. MySQL
