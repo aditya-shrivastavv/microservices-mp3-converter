@@ -1,0 +1,13 @@
+name: Build and Push Auth Service Docker Image
+on:
+    workflow_dispatch:
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
+          - name: Test github actions
+            run: ls
+          - name: Test github actions 2
+            run: pwd
