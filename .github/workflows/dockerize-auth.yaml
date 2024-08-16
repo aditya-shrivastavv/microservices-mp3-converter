@@ -5,9 +5,19 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-          - name: Checkout code
-            uses: actions/checkout@v4
-          - name: Test github actions
-            run: ls
-          - name: Test github actions 2
-            run: pwd
+            -
+                name: Checkout code
+                uses: actions/checkout@v4
+            -   
+                name: Login to Docker Hub
+                uses: docker/login-action@v3
+                with:
+                    username: ${{ secrets.DOCKERHUB_USERNAME }}
+                    password: ${{ secrets.DOCKERHUB_TOKEN }}
+            -
+                name: Build and Push
+                uses: docker/build-push-action@v6
+                with:
+                    context: ./src/auth
+                    push: true
+          
