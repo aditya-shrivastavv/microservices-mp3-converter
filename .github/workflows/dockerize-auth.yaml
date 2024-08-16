@@ -19,5 +19,6 @@ jobs:
                 uses: docker/build-push-action@v6
                 with:
                     context: ./src/auth
+                    tags: ${{ secrets.DOCKERHUB_USERNAME }}/auth-microservices1:latest
                     push: true
           
