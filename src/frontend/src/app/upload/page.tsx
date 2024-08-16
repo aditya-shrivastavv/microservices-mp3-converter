@@ -144,7 +144,7 @@ export default function Home() {
       <div className="container">
         <Container {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} {...register('file')} />
-          <p>Drop video files here Or click</p>
+          <p>Drop video files here</p>
         </Container>
         {!isFileUploaded ? (
           acceptedFiles.length > 0 && (
