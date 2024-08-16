@@ -20,5 +20,5 @@ function getGatewayUrl() {
 export async function GET(request: NextRequest) {
   unstable_noStore()
   const gatewayUrl = (await getGatewayUrl()) as string
-  return new Response('gateway-service', { status: 200 })
+  return new Response('http://gateway-service', { status: 200 })
 }
