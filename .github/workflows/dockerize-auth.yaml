@@ -2,7 +2,7 @@ name: Build and Push (Auth)
 on:
     workflow_dispatch:
 jobs:
-    build:
+    build-push:
         runs-on: ubuntu-latest
         steps:
             -
