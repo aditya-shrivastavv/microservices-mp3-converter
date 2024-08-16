@@ -1,4 +1,4 @@
-name: Build and Push Auth Service Docker Image
+name: Build and Push (Auth)
 on:
     workflow_dispatch:
 jobs:
