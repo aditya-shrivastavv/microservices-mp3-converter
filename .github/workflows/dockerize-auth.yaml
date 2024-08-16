@@ -1,6 +1,11 @@
 name: Build and Push (Auth)
 on:
     workflow_dispatch:
+    push:
+        branches:
+            - main
+        paths:
+            - "src/auth/**"
 jobs:
     build-push:
         runs-on: ubuntu-latest
