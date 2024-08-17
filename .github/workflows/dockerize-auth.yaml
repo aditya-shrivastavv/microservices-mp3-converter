@@ -6,9 +6,6 @@ on:
             - main
         paths:
             - "src/auth/**"
-        paths-ignore: 
-            - "src/auth/README.md"
-
 jobs:
     build-push:
         runs-on: ubuntu-latest

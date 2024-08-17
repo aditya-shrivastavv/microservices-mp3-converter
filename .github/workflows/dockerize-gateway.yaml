@@ -6,8 +6,6 @@ on:
             - main
         paths:
             - "src/gateway/**"
-        paths-ignore: 
-            - "src/gateway/README.md"
 jobs:
     build-push:
         runs-on: ubuntu-latest

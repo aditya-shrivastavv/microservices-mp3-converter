@@ -6,8 +6,6 @@ on:
             - main
         paths:
             - "src/converter/**"
-        paths-ignore: 
-            - "src/converter/README.md"
 jobs:
     build-push:
         runs-on: ubuntu-latest

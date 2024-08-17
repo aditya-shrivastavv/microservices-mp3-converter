@@ -6,8 +6,6 @@ on:
             - main
         paths:
             - "src/frontend/**"
-        paths-ignore: 
-            - "src/frontend/README.md"
 jobs:
     build-push:
         runs-on: ubuntu-latest
