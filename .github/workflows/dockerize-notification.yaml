@@ -6,6 +6,8 @@ on:
             - main
         paths:
             - "src/notification/**"
+        paths-ignore: 
+            - "src/notification/README.md"
 jobs:
     build-push:
         runs-on: ubuntu-latest
