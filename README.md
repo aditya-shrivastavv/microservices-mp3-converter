@@ -48,15 +48,23 @@ The project consists of 8 services in total:
 
 ### Prerequisites
 
+- [Kubeseal](https://github.com/bitnami-labs/sealed-secrets) - Needed to encrypt the secrets in the kubernetes manifests
+
 **Local Deployment:**
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
 
+There is no script for local deployment. You have to manually create the cluster using the files in `kind/` directory and then deploy the services using the kubernetes manifests in `kubernetes/` directory.
+
 **AWS Deployment:**
 
 - [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 - [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+
+This deployment is fully automated. You just have to run the `deploy.ps1` script and it will take care of everything.
+
+**NOTE:** In `deploy.ps1` script the ansible command is executed within WSL. So make sure you have WSL installed and configured if that applies to you otherwise modify the that command accordingly to your environment or OS.
 
 ### Sensitive files
 
