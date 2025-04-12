@@ -1,24 +1,17 @@
-- name: Add Helm GPG key
-  ansible.builtin.apt_key:
-    url: https://baltocdn.com/helm/signing.asc
-    state: present
-    keyring: /usr/share/keyrings/helm.gpg
+- name: Download and install Helm
+  ansible.builtin.shell: |
+    curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  args:
+    creates: /usr/local/bin/helm
 
-- name: Install apt-transport-https
-  ansible.builtin.apt:
-    name: apt-transport-https
-    state: present
+- name: Verify Helm installation
+  ansible.builtin.command:
+    cmd: helm version
+  register: helm_version_output
 
-- name: Add Helm repository
-  ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main"
-    state: present
-    update_cache: yes
-
-- name: Install Helm
-  ansible.builtin.apt:
-    name: helm
-    state: present
+- name: Display Helm version
+  ansible.builtin.debug:
+    msg: "{{ helm_version_output.stdout }}"
 
 - name: Install sealed secrets
   kubernetes.core.helm:

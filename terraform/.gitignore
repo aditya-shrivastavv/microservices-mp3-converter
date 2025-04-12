@@ -1,6 +1,7 @@
 .terraform/
 terraform.tfstate
-terraform.tfstate.backup
+terraform.tfstate.*
+.terraform.tfstate.*
 .terraform.lock.hcl
 
 access_keys.tf
